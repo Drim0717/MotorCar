@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Emulador de Motor V8 | Tesla Model 3</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <meta name="theme-color" content="#000000">
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">TESLA<span>SOUND</span></div>
+            <div class="status-indicator" id="status-indicator">OFF</div>
+        </header>
+
+        <main>
+            <div class="speedometer-container">
+                <svg class="speed-ring" viewBox="0 0 100 100">
+                    <circle class="ring-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="ring-progress" id="speed-progress" cx="50" cy="50" r="45"></circle>
+                </svg>
+                <div class="speed-display">
+                    <span id="speed-value">0</span>
+                    <span class="unit">KM/H</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="toggle-btn" class="power-btn">
+                    <span class="power-icon">⏻</span> INICIAR MOTOR
+                </button>
+
+                <div class="settings-panel">
+                    <div class="setting-item">
+                        <label>Volumen Motor</label>
+                        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.8">
+                    </div>
+                    <div class="setting-item">
+                        <label>Tipo de Motor</label>
+                        <select id="engine-type">
+                            <option value="v8">V8 Muscle</option>
+                            <option value="f1">Formula 1</option>
+                            <option value="spaceship">Spaceship</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-text">
+                <p>Usa el GPS para detectar velocidad.</p>
+                <p>Conecta Bluetooth al Tesla para mejor experiencia.</p>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
