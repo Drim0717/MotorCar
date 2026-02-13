@@ -6,11 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusIndicator = document.getElementById('status-indicator');
     const volumeSlider = document.getElementById('volume-slider');
     const engineTypeSelector = document.getElementById('engine-type');
+    const testBtn = document.getElementById('test-btn');
 
     // State
     let isRunning = false;
     let currentSpeed = 0; // km/h
     let targetSpeed = 0;
+    let isTesting = false;
 
     // Audio Context
     let audioCtx;
@@ -28,12 +30,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Logic: Smooth speed transition
     setInterval(() => {
+        let activeTarget = targetSpeed;
+
+        // Manual override for testing
+        if (isTesting) {
+            activeTarget = MAX_SPEED * 0.8; // Target 80% speed when held
+        }
+
         // Interpolate current speed towards target speed for smoothness
-        const diff = targetSpeed - currentSpeed;
-        if (Math.abs(diff) > 0.5) {
-            currentSpeed += diff * 0.15; // Slightly faster response
+        const diff = activeTarget - currentSpeed;
+
+        if (isTesting) {
+            // Accelerate faster when testing
+            currentSpeed += diff * 0.05;
         } else {
-            currentSpeed = targetSpeed;
+            // Normal GPS smoothing
+            if (Math.abs(diff) > 0.5) {
+                currentSpeed += diff * 0.15;
+            } else {
+                currentSpeed = activeTarget;
+            }
         }
 
         updateUI(currentSpeed);
@@ -45,10 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // GPS Tracking
     if ("geolocation" in navigator) {
         navigator.geolocation.watchPosition((position) => {
-            // position.coords.speed is in m/s. 
-            // If null (stationary), use 0.
-            const speedMs = position.coords.speed || 0;
-            targetSpeed = (speedMs * 3.6); // Convert to km/h
+            if (!isTesting) {
+                // position.coords.speed is in m/s. 
+                const speedMs = position.coords.speed || 0;
+                targetSpeed = (speedMs * 3.6); // Convert to km/h
+            }
 
             // Debugging: If speed is 0 but accuracy is high, we are stopped.
             // console.log(`GPS Speed: ${targetSpeed.toFixed(1)} km/h`);
@@ -388,4 +405,24 @@ document.addEventListener('DOMContentLoaded', () => {
             createEngineSound();
         }
     });
+
+    // Test Button Logic
+    function startTest() {
+        if (!isRunning) return;
+        isTesting = true;
+    }
+
+    function endTest() {
+        isTesting = false;
+    }
+
+    testBtn.addEventListener('mousedown', startTest);
+    testBtn.addEventListener('mouseup', endTest);
+    testBtn.addEventListener('mouseleave', endTest);
+
+    testBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Prevent ghost clicks
+        startTest();
+    });
+    testBtn.addEventListener('touchend', endTest);
 });

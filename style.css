@@ -171,6 +171,28 @@ main {
     box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
 }
 
+.test-btn {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    padding: 15px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.test-btn:active {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(0.98);
+}
+
 .settings-panel {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
